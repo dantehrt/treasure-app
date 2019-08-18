@@ -42,9 +42,7 @@ class ShowCalenderPage extends React.Component {
 
   render() {
     let list = [];
-    let tmpStyle = null;
     for (let i = 0; i < numberOfWeekCalenders; i++) {
-      tmpStyle = {display: ""};
       list.push(
         <div id={"calenderParentDiv" + i}
              style={{display: this.state.whichVisibleCalenderParentDiv === null || this.state.whichVisibleCalenderParentDiv === i? "inline" : "none"}}>
