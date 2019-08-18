@@ -1,13 +1,23 @@
 import React from 'react';
 import GridLayout from 'react-grid-layout';
 import AddableCalender from "./AddableCalender";
+import ShowCalenderPage from "./ShowCalenderPage";
 
-class AddCalenderPage extends React.Component {
-  onLayoutChange = layout => {
-    this.setState({layout: layout});
-  };
+const numberOfWeekCalenders = 3;
 
+class AddCalenderPage extends ShowCalenderPage {
   render() {
+    let list = [];
+    let tmpStyle = null;
+    for (let i = 0; i < numberOfWeekCalenders; i++) {
+      tmpStyle = {display: ""};
+      list.push(
+        <div id={"calenderParentDiv" + i}
+             style={{display: this.state.whichVisibleCalenderParentDiv === null || this.state.whichVisibleCalenderParentDiv === i? "inline" : "none"}}>
+          <AddableCalender onLayoutChange={this.onLayoutChange} calenderID={i}/>
+        </div>
+      )
+    }
     return (
       <div className="CalenderPage">
         <div id={"title-section"}>
@@ -16,15 +26,10 @@ class AddCalenderPage extends React.Component {
           <h2>コメント</h2>
         </div>
         <div id={"calender-section"}>
+          {list}
           <div>
-            <AddableCalender onLayoutChange={this.onLayoutChange} calenderID={1}/>
-          </div>
-          <div>
-            <AddableCalender onLayoutChange={this.onLayoutChange} calenderID={2}/>
-          </div>
-          <div>
-            <button>back</button>
-            <button>next</button>
+            <button onClick={this.onClickBack.bind(this)}>back</button>
+            <button onClick={this.onClickNext.bind(this)}>next</button>
           </div>
           <button>save</button>
         </div>
