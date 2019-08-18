@@ -7,11 +7,10 @@ import moment from "moment";
 const calenderDetail = {
   "title": "titleだよ",
   "description": "description",
-  "start_date": "2019-08-15,木",
-  "end_date": "2019-08-30,金",
+  "start_date": "2019-08-15",
+  "end_date": "2019-08-30",
 };
 
-let numberOfWeekCalenders;
 let startDate;
 let calenderStartDate;
 let endDate;
@@ -20,36 +19,12 @@ class ShowCalenderPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      whichVisibleCalenderParentDiv: null,
-    };
-
     startDate = moment(calenderDetail.start_date.split(',')[0]);
     calenderStartDate = moment(startDate).subtract(startDate.day(), 'days');
     endDate = moment(calenderDetail.end_date.split(',')[0]);
-    numberOfWeekCalenders = Math.ceil(endDate.diff(calenderStartDate, 'days') / 7);
-  }
+    let numberOfWeekCalenders = Math.ceil((endDate.diff(calenderStartDate, 'days') + 1) / 7);
 
-  componentDidMount() {
-    this.setState({whichVisibleCalenderParentDiv: 0});
-  }
-
-  onLayoutChange = layout => {
-    this.setState({layout: layout});
-  };
-
-  onClickNext() {
-    this.setState({whichVisibleCalenderParentDiv: Math.min(numberOfWeekCalenders - 1, this.state.whichVisibleCalenderParentDiv + 1)});
-  }
-
-  onClickBack() {
-    console.log("Clicked Back");
-    this.setState({whichVisibleCalenderParentDiv: Math.max(0, this.state.whichVisibleCalenderParentDiv - 1)});
-    console.log(this.state);
-  }
-
-  render() {
-    let list = [];
+    let calenderDatesList = [];
     let targetDate = moment(startDate);
     for (let i = 0; i < numberOfWeekCalenders; i++) {
       let calenderDates = [];
@@ -79,10 +54,42 @@ class ShowCalenderPage extends React.Component {
         }
       }
 
+      calenderDatesList.push(calenderDates);
+    }
+
+
+    this.state = {
+      whichVisibleCalenderParentDiv: null,
+      calenderDatesList: calenderDatesList,
+      numberOfWeekCalenders: numberOfWeekCalenders,
+    };
+  }
+
+  componentDidMount() {
+    this.setState({whichVisibleCalenderParentDiv: 0});
+  }
+
+  onLayoutChange = layout => {
+    this.setState({layout: layout});
+  };
+
+  onClickNext() {
+    this.setState({whichVisibleCalenderParentDiv: Math.min(this.state.numberOfWeekCalenders - 1, this.state.whichVisibleCalenderParentDiv + 1)});
+  }
+
+  onClickBack() {
+    console.log("Clicked Back");
+    this.setState({whichVisibleCalenderParentDiv: Math.max(0, this.state.whichVisibleCalenderParentDiv - 1)});
+    console.log(this.state);
+  }
+
+  render() {
+    let list = [];
+    for (let i = 0; i < this.state.numberOfWeekCalenders; i++) {
       list.push(
         <div id={"calenderParentDiv" + i}
              style={{display: this.state.whichVisibleCalenderParentDiv === null || this.state.whichVisibleCalenderParentDiv === i ? "inline" : "none"}}>
-          <Calender onLayoutChange={this.onLayoutChange} calenderID={i} calenderDates={calenderDates}/>
+          <Calender onLayoutChange={this.onLayoutChange} calenderID={i} calenderDates={this.state.calenderDatesList[i]}/>
         </div>
       )
     }

@@ -240,7 +240,7 @@ class Calender extends React.PureComponent {
     const candidateScheduleGridStyle = {
       position: "relative",
       background: "#8ede43",
-      opacity: gridText.length / this.state.maxNumberOfPeopleOfEachSchedule,
+      opacity: gridText ? gridText.length / this.state.maxNumberOfPeopleOfEachSchedule : 1,
     };
 
     let contentOfGrid = null;
