@@ -27,36 +27,25 @@ class ShowCalendarPage extends React.Component {
     let calendarDatesList = [];
     let targetDate = moment(startDate);
     for (let i = 0; i < numberOfWeekCalendars; i++) {
+      console.log(targetDate.format('YYYY-MM-DD'));
       let calendarDates = [];
+      let startDayOfWeek = 0;
       if (i === 0) {//初週
-        calendarDates = calendarDates.concat(Array.apply(null, Array(startDate.day())).map(function () {
+        startDayOfWeek = startDate.day();
+        calendarDates = calendarDates.concat(Array.apply(null, Array(startDayOfWeek)).map(function () {
           return null
         }));
-        for (let j = 0; j < 7; j++) {
-          if (endDate < targetDate) {
-            calendarDates.push(null);
-          } else {
-            calendarDates.push(targetDate.format('YYYY-MM-DD'));
-          }
-          targetDate.add(1, 'days');
-          if (calendarDates.length >= 7) {
-            break
-          }
-        }
-      } else {
-        for (let j = 0; j < 7; j++) {
-          if (endDate < targetDate) {
-            calendarDates.push(null);
-          } else {
-            calendarDates.push(targetDate.format('YYYY-MM-DD'));
-          }
-          targetDate.add(1, 'days')
-        }
       }
-
+      for (let j = startDayOfWeek; j < 7; j++) {
+        if (endDate < targetDate) {
+          calendarDates.push(null);
+        } else {
+          calendarDates.push(targetDate.format('YYYY-MM-DD'));
+        }
+        targetDate.add(1, 'days');
+      }
       calendarDatesList.push(calendarDates);
     }
-
 
     this.state = {
       whichVisibleCalendarParentDiv: null,
@@ -89,7 +78,8 @@ class ShowCalendarPage extends React.Component {
       list.push(
         <div id={"calendarParentDiv" + i}
              style={{display: this.state.whichVisibleCalendarParentDiv === null || this.state.whichVisibleCalendarParentDiv === i ? "inline" : "none"}}>
-          <Calendar onLayoutChange={this.onLayoutChange} calendarID={i} calendarDates={this.state.calendarDatesList[i]}/>
+          <Calendar onLayoutChange={this.onLayoutChange} calendarID={i}
+                    calendarDates={this.state.calendarDatesList[i]}/>
         </div>
       )
     }
