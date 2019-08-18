@@ -114,7 +114,7 @@ class AddableCalender extends Calender {
   }
 
   clickCalender(e) {
-    const element = document.getElementById("calender").getBoundingClientRect();
+    const element = document.getElementById("calender" + this.props.calenderID).getBoundingClientRect();
     const elementTopX = Math.floor(element.x);
     const elementTopY = Math.floor(element.y);
     const elementWidth = Math.floor(element.width);
@@ -158,7 +158,7 @@ class AddableCalender extends Calender {
           height: (gridRowHeight + calenderMarginY) * (numberOfRows + 2),
           width: "100%",
         }}>
-          <div id={"calender"} onClick={this.clickCalender.bind(this)} style={calenderStyle}>
+          <div id={"calender" + this.props.calenderID} onClick={this.clickCalender.bind(this)} style={calenderStyle}>
             <ResponsiveReactGridLayout
               onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange}
@@ -167,7 +167,8 @@ class AddableCalender extends Calender {
               {_.map(this.state.items, el => this.createElement(el))}
             </ResponsiveReactGridLayout>
           </div>
-          <div id={"calenderBackground"} style={this.state.calenderBackendStyle}>
+          <div id={"calenderBackground" + this.props.calenderID} className={"calenderBackground"}
+               style={this.state.calenderBackendStyle}>
           </div>
         </div>
       </div>

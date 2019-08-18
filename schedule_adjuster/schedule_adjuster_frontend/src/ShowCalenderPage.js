@@ -22,7 +22,12 @@ class ShowCalenderPage extends React.Component {
           <h2>{calenderDetail.description}</h2>
         </div>
         <div id={"calender-section"}>
-          <Calender onLayoutChange={this.onLayoutChange} start_date={calenderDetail.start_date} end_date={calenderDetail.end_date} />
+          <div>
+            <Calender onLayoutChange={this.onLayoutChange} start_date={calenderDetail.start_date} end_date={calenderDetail.end_date} />
+          </div>
+          <div>
+            <Calender onLayoutChange={this.onLayoutChange} start_date={calenderDetail.start_date} end_date={calenderDetail.end_date} />
+          </div>
           <div>
             <button>back</button>
             <button>next</button>

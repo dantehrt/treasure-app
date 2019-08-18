@@ -16,8 +16,12 @@ class AddCalenderPage extends React.Component {
           <h2>コメント</h2>
         </div>
         <div id={"calender-section"}>
-
-          <AddableCalender onLayoutChange={this.onLayoutChange}/>
+          <div>
+            <AddableCalender onLayoutChange={this.onLayoutChange} calenderID={1}/>
+          </div>
+          <div>
+            <AddableCalender onLayoutChange={this.onLayoutChange} calenderID={2}/>
+          </div>
           <div>
             <button>back</button>
             <button>next</button>

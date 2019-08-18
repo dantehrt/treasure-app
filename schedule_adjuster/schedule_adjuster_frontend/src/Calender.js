@@ -167,7 +167,7 @@ class Calender extends React.PureComponent {
   }
 
   componentDidMount() {
-    const element = document.getElementById("calender").getBoundingClientRect();
+    const element = document.getElementById("calender" +this.props.calenderID).getBoundingClientRect();
     calenderDivWidth = Math.floor(element.width);
     const gridWidth = calenderDivWidth / numberOfColumns;
     const calenderBackendStyle = {
@@ -271,7 +271,7 @@ class Calender extends React.PureComponent {
           height: (gridRowHeight + calenderMarginY) * (numberOfRows + 2),
           width: "100%",
         }}>
-          <div id={"calender"} style={calenderStyle}>
+          <div id={"calender"  +this.props.calenderID} style={calenderStyle}>
             <ResponsiveReactGridLayout
               onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange}
@@ -280,7 +280,7 @@ class Calender extends React.PureComponent {
               {_.map(this.state.items, el => this.createElement(el))}
             </ResponsiveReactGridLayout>
           </div>
-          <div id={"calenderBackground"} style={this.state.calenderBackendStyle}>
+          <div id={"calenderBackground" +this.props.calenderID} className={"calenderBackground"} style={this.state.calenderBackendStyle}>
           </div>
         </div>
       </div>
