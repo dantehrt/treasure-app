@@ -110,6 +110,7 @@ class Calender extends React.PureComponent {
       y: numberOfRows,
       w: numberOfColumns,
       h: 2,
+      gridText: null,
       static: true,
       gridType: null,
       minW: gridMinWidth,
@@ -125,29 +126,31 @@ class Calender extends React.PureComponent {
     for (let i = 0; i < 25; i++) {
       gridContent = baseGridContent;
       gridContent["i"] = i.toString() + ":00";
+      gridContent["gridText"] = i.toString() + ":00";
       gridContent["y"] = i * 2;
       gridContent["w"] = 1;
       gridContent["gridType"] = "timeGrid";
       items.push(Object.assign({}, gridContent));
     }
+    const calenderDates = this.props.calenderDates;
     //曜日のグリッドを追加
     for (let i = 0; i < 7; i++) {
       gridContent = baseGridContent;
       gridContent["i"] = dow[i];
+      gridContent["gridText"] = dow[i];
       gridContent["x"] = i + 1;
       gridContent["y"] = 0;
       gridContent["w"] = 1;
       gridContent["gridType"] = "dateGrid";
       items.push(Object.assign({}, gridContent));
     }
-
     //unableGridを追加
-    const calenderDates = this.props.calenderDates;
     for (let i in calenderDates) {
       if (calenderDates[i] === null) {
         console.log(calenderDates[i]);
         gridContent = baseGridContent;
         gridContent["i"] = "null" + (i + 1).toString();
+        gridContent["gridText"] = "null" + (i + 1).toString();
         gridContent["x"] = Number(i) + 1;
         gridContent["y"] = 2;
         gridContent["w"] = 1;
@@ -196,7 +199,8 @@ class Calender extends React.PureComponent {
       top: 0,
       cursor: "pointer"
     };
-    const i = el.i;
+    const key = el.i;
+    const gridText = el.gridText;
     const bottomGridStyle = {
       position: "relative",
       background: "#b0c4de",
@@ -229,22 +233,22 @@ class Calender extends React.PureComponent {
     if (el.gridType === "bottomGrid") {
       gridStyle = bottomGridStyle;
       contentOfGrid =
-        <span className="text" style={{position: "absolute", bottom: "0", alignItems: "center"}}>{i}</span>;
+        <span className="text" style={{position: "absolute", bottom: "0", alignItems: "center"}}>{gridText}</span>;
     } else if (el.gridType === "timeGrid") {
       gridStyle = timeGriStyle;
       contentOfGrid =
-        <span className="text" style={{position: "absolute", bottom: "0", alignItems: "right"}}>{i}</span>;
+        <span className="text" style={{position: "absolute", bottom: "0", alignItems: "right"}}>{gridText}</span>;
     } else if (el.gridType === "dateGrid") {
       gridStyle = dateGridStyle;
-      contentOfGrid = <span className="text" style={{position: "absolute", bottom: "0"}}>{i}</span>;
+      contentOfGrid = <span className="text" style={{position: "absolute", bottom: "0"}}>{gridText}</span>;
     } else if (el.gridType === "unableGrid") {
       gridStyle = unableGridStyle;
     } else {
       gridStyle = scheduleGridStyle;
-      removeButton = <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, i)}>x</span>
+      removeButton = <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, key)}>x</span>
     }
     return (
-      <div key={i} data-grid={el} style={gridStyle} onClick={(e) => e.stopPropagation()}>
+      <div key={key} data-grid={el} style={gridStyle} onClick={(e) => e.stopPropagation()}>
         {contentOfGrid}
         {removeButton}
       </div>
