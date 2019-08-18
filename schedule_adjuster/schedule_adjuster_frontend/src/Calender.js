@@ -86,7 +86,7 @@ const tmp20190819 = [
 ];
 
 resultsJSONs = resultsJSONs.concat(tmp20190817, tmp20190819);
-console.log(resultsJSONs);
+// console.log(resultsJSONs);
 
 
 class Calender extends React.PureComponent {
@@ -133,8 +133,8 @@ class Calender extends React.PureComponent {
 
     const today = moment().add(-1, 'days');
     const weekStartDate = moment().add( today.day() + 1, 'days');
-    console.log(today);
-    console.log(weekStartDate);
+    // console.log(today);
+    // console.log(weekStartDate);
     //曜日のグリッドを追加
     for (let i = 0; i < 7; i++) {
       gridContent = baseGridContent;
@@ -146,16 +146,31 @@ class Calender extends React.PureComponent {
       items.push(Object.assign({}, gridContent));
     }
 
-    //ここで予定を入れる
-    for (let i = 0; i < 7; i++) {
-      gridContent = baseGridContent;
-      gridContent["i"] = (i + 1).toString();
-      gridContent["x"] = i + 1;
-      gridContent["y"] = i * 2 + 2;
-      gridContent["w"] = 1;
-      gridContent["gridType"] = "scheduleGrid";
-      items.push(Object.assign({}, gridContent));
+    const calenderDates = this.props.calenderDates;
+    for (let i in calenderDates) {
+      if (calenderDates[i] === null) {
+        console.log(calenderDates[i]);
+        gridContent = baseGridContent;
+        gridContent["i"] = "null" + (i + 1).toString();
+        gridContent["x"] = Number(i) + 1;
+        gridContent["y"] = 2;
+        gridContent["w"] = 1;
+        gridContent["h"] = 48;
+        gridContent["gridType"] = "unableGrid";
+        items.push(Object.assign({}, gridContent));
+      }
     }
+    //
+    // //ここで予定を入れる
+    // for (let i = 0; i < 7; i++) {
+    //   gridContent = baseGridContent;
+    //   gridContent["i"] = (i + 1).toString();
+    //   gridContent["x"] = i + 1;
+    //   gridContent["y"] = i * 2 + 2;
+    //   gridContent["w"] = 1;
+    //   gridContent["gridType"] = "scheduleGrid";
+    //   items.push(Object.assign({}, gridContent));
+    // }
 
     this.state = {
       items: items,
@@ -201,6 +216,12 @@ class Calender extends React.PureComponent {
       background: "white",
       textAlign: "center"
     };
+    const unableGridStyle = {
+      position: "relative",
+      background: "gray",
+      textAlign: "center",
+      opacity: "0.3"
+    };
     const scheduleGridStyle = {
       position: "relative",
       background: "#b0c4de",
@@ -220,6 +241,8 @@ class Calender extends React.PureComponent {
     } else if (el.gridType === "dateGrid") {
       gridStyle = dateGridStyle;
       contentOfGrid = <span className="text" style={{position: "absolute", bottom: "0"}}>{i}</span>;
+    } else if (el.gridType === "unableGrid") {
+      gridStyle = unableGridStyle;
     } else {
       gridStyle = scheduleGridStyle;
       removeButton = <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, i)}>x</span>

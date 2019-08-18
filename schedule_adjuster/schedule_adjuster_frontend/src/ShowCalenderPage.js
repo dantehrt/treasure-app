@@ -1,6 +1,7 @@
 import React from 'react';
 import Calender from "./Calender";
 import AddableCalender from "./AddableCalender";
+import moment from "moment";
 
 const calenderDetail = {
   "title": "titleだよ",
@@ -9,7 +10,10 @@ const calenderDetail = {
   "end_date": "2019-08-30,金",
 };
 
-const numberOfWeekCalenders = 3;
+let numberOfWeekCalenders;
+let startDate;
+let calenderStartDate;
+let endDate;
 
 class ShowCalenderPage extends React.Component {
   constructor(props) {
@@ -19,7 +23,10 @@ class ShowCalenderPage extends React.Component {
       whichVisibleCalenderParentDiv: null,
     };
 
-
+    startDate = moment(calenderDetail.start_date.split(',')[0]);
+    calenderStartDate = moment(startDate).subtract(startDate.day(), 'days');
+    endDate = moment(calenderDetail.end_date.split(',')[0]);
+    numberOfWeekCalenders = Math.ceil(endDate.diff(calenderStartDate, 'days') / 7);
   }
 
   componentDidMount() {
@@ -27,7 +34,7 @@ class ShowCalenderPage extends React.Component {
   }
 
   onLayoutChange = layout => {
-    this.setState({ layout: layout });
+    this.setState({layout: layout});
   };
 
   onClickNext() {
@@ -42,11 +49,39 @@ class ShowCalenderPage extends React.Component {
 
   render() {
     let list = [];
+    let targetDate = moment(startDate);
     for (let i = 0; i < numberOfWeekCalenders; i++) {
+      let calenderDates = [];
+      if (i === 0) {
+        calenderDates = calenderDates.concat(Array.apply(null, Array(startDate.day())).map(function () {
+          return null
+        }));
+        for (let j = 0; j < 7; j++) {
+          if (endDate < targetDate) {
+            calenderDates.push(null);
+          } else {
+            calenderDates.push(targetDate.format('YYYY-MM-DD'));
+          }
+          targetDate.add(1, 'days');
+          if (calenderDates.length >= 7) {
+            break
+          }
+        }
+      } else {
+        for (let j = 0; j < 7; j++) {
+          if (endDate < targetDate) {
+            calenderDates.push(null);
+          } else {
+            calenderDates.push(targetDate.format('YYYY-MM-DD'));
+          }
+          targetDate.add(1, 'days')
+        }
+      }
+
       list.push(
         <div id={"calenderParentDiv" + i}
-             style={{display: this.state.whichVisibleCalenderParentDiv === null || this.state.whichVisibleCalenderParentDiv === i? "inline" : "none"}}>
-          <Calender onLayoutChange={this.onLayoutChange} calenderID={i}/>
+             style={{display: this.state.whichVisibleCalenderParentDiv === null || this.state.whichVisibleCalenderParentDiv === i ? "inline" : "none"}}>
+          <Calender onLayoutChange={this.onLayoutChange} calenderID={i} calenderDates={calenderDates}/>
         </div>
       )
     }
