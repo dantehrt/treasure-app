@@ -64,20 +64,11 @@ class AddableCalender extends Calender {
     const columnIndex = Math.min(Math.floor(clickPointX / (gridWidth + calenderMarginX)), numberOfColumns - 1);
     const rowIndex = Math.min(Math.floor(clickPointY / (this.props.rowHeight + calenderMarginY)), 47);
 
-    console.log("##############");
-    console.log("clickPointX", clickPointX);
-    console.log("clickPointY", clickPointY);
-    console.log("elementWidth", elementWidth);
-
-    console.log("gridWidth", gridWidth);
-    console.log("columnIndex", columnIndex);
-    console.log("rowIndex", rowIndex);
-
     this.onAddItem(rowIndex, columnIndex)
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const calenderStyle = {
       height: (gridRowHeight + calenderMarginY) * numberOfRows,
       width: "100%",

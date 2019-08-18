@@ -147,7 +147,6 @@ class Calender extends React.PureComponent {
     //unableGridを追加
     for (let i in calenderDates) {
       if (calenderDates[i] === null) {
-        console.log(calenderDates[i]);
         gridContent = baseGridContent;
         gridContent["i"] = "null" + (i + 1).toString();
         gridContent["gridText"] = "null" + (i + 1).toString();

@@ -31,7 +31,7 @@ class AddCalenderPage extends ShowCalenderPage {
     endDate = moment(calenderDetail.end_date.split(',')[0]);
     numberOfWeekCalenders = Math.ceil(endDate.diff(calenderStartDate, 'days') / 7);
   }
-  
+
   render() {
     let list = [];
     let targetDate = moment(startDate);
@@ -62,7 +62,6 @@ class AddCalenderPage extends ShowCalenderPage {
           targetDate.add(1, 'days')
         }
       }
-      console.log(calenderDates);
 
       list.push(
         <div id={"calenderParentDiv" + i}
