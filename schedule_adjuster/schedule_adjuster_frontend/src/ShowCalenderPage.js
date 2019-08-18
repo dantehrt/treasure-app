@@ -7,7 +7,7 @@ import moment from "moment";
 const calenderDetail = {
   "title": "titleだよ",
   "description": "description",
-  "start_date": "2019-08-17,土",
+  "start_date": "2019-08-15,木",
   "end_date": "2019-08-30,金",
 };
 
@@ -53,7 +53,7 @@ class ShowCalenderPage extends React.Component {
     let targetDate = moment(startDate);
     for (let i = 0; i < numberOfWeekCalenders; i++) {
       let calenderDates = [];
-      if (i === 0) {
+      if (i === 0) {//初週
         calenderDates = calenderDates.concat(Array.apply(null, Array(startDate.day())).map(function () {
           return null
         }));
