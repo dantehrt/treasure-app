@@ -130,11 +130,6 @@ class Calender extends React.PureComponent {
       gridContent["gridType"] = "timeGrid";
       items.push(Object.assign({}, gridContent));
     }
-
-    const today = moment().add(-1, 'days');
-    const weekStartDate = moment().add( today.day() + 1, 'days');
-    // console.log(today);
-    // console.log(weekStartDate);
     //曜日のグリッドを追加
     for (let i = 0; i < 7; i++) {
       gridContent = baseGridContent;
@@ -146,6 +141,7 @@ class Calender extends React.PureComponent {
       items.push(Object.assign({}, gridContent));
     }
 
+    //unableGridを追加
     const calenderDates = this.props.calenderDates;
     for (let i in calenderDates) {
       if (calenderDates[i] === null) {

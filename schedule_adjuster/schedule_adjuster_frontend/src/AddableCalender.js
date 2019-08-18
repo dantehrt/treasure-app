@@ -83,6 +83,22 @@ class AddableCalender extends Calender {
       items.push(Object.assign({}, gridContent));
     }
 
+    //unableGridを追加
+    const calenderDates = this.props.calenderDates;
+    for (let i in calenderDates) {
+      if (calenderDates[i] === null) {
+        console.log(calenderDates[i]);
+        gridContent = baseGridContent;
+        gridContent["i"] = "null" + (i + 1).toString();
+        gridContent["x"] = Number(i) + 1;
+        gridContent["y"] = 2;
+        gridContent["w"] = 1;
+        gridContent["h"] = 48;
+        gridContent["gridType"] = "unableGrid";
+        items.push(Object.assign({}, gridContent));
+      }
+    }
+
     this.state = {
       items: items,
       newCounter: 0,
