@@ -2,7 +2,6 @@ import React from "react";
 import {WidthProvider, Responsive} from "react-grid-layout";
 import _ from "lodash";
 import './Calender.css'
-import moment from "moment";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -18,13 +17,13 @@ const numberOfColumns = 8;
 const numberOfRows = 50;
 //曜日
 const dow = {
-  0: "日",
-  1: "月",
-  2: "火",
-  3: "水",
-  4: "木",
-  5: "金",
-  6: "土",
+  "日": 0,
+  "月": 1,
+  "火": 2,
+  "水": 3,
+  "木": 4,
+  "金": 5,
+  "土": 6,
 };
 
 let calenderDivWidth = null;
@@ -36,7 +35,7 @@ const tmp20190817 = [
     "dow": "土",
     "start_time": 10,
     "end_time": 12,
-    "people": ["ダンテ", "立", "ひろき"]
+    "people": ["ダンテ", "立", "ひろき", "ひろき"]
   },
   {
     "date": "2019-08-17",
@@ -55,6 +54,13 @@ const tmp20190817 = [
   {
     "date": "2019-08-17",
     "dow": "土",
+    "start_time": 18,
+    "end_time": 20,
+    "people": ["ダンテ","ダンテ"]
+  },
+  {
+    "date": "2019-08-17",
+    "dow": "土",
     "start_time": 20,
     "end_time": 24,
     "people": ["ダンテ"]
@@ -62,27 +68,27 @@ const tmp20190817 = [
 ];
 
 const tmp20190819 = [
-  {
-    "date": "2019-08-19",
-    "dow": "月",
-    "start_time": 11,
-    "end_time": 13,
-    "people": ["ダンテ", "立", "ひろき"]
-  },
-  {
-    "date": "2019-08-19",
-    "dow": "月",
-    "start_time": 17,
-    "end_time": 19,
-    "people": ["ひろき"]
-  },
-  {
-    "date": "2019-08-19",
-    "dow": "月",
-    "start_time": 21,
-    "end_time": 24,
-    "people": ["ダンテ"]
-  },
+  // {
+  //   "date": "2019-08-19",
+  //   "dow": "月",
+  //   "start_time": 11,
+  //   "end_time": 13,
+  //   "people": ["ダンテ", "立", "ひろき"]
+  // },
+  // {
+  //   "date": "2019-08-19",
+  //   "dow": "月",
+  //   "start_time": 17,
+  //   "end_time": 19,
+  //   "people": ["ひろき"]
+  // },
+  // {
+  //   "date": "2019-08-19",
+  //   "dow": "月",
+  //   "start_time": 21,
+  //   "end_time": 24,
+  //   "people": ["ダンテ"]
+  // },
 ];
 
 resultsJSONs = resultsJSONs.concat(tmp20190817, tmp20190819);
@@ -120,6 +126,7 @@ class Calender extends React.PureComponent {
     //　24時過ぎまで伸ばせないように，一番下にGridを敷いている
     let gridContent = baseGridContent;
     gridContent["i"] = bottomGridText;
+    gridContent["gridText"] = bottomGridText;
     gridContent["gridType"] = "bottomGrid";
     items.push(Object.assign({}, gridContent));
     //時間のグリッドを追加
@@ -136,8 +143,8 @@ class Calender extends React.PureComponent {
     //曜日のグリッドを追加
     for (let i = 0; i < 7; i++) {
       gridContent = baseGridContent;
-      gridContent["i"] = dow[i];
-      gridContent["gridText"] = dow[i];
+      gridContent["i"] = Object.keys(dow)[i];
+      gridContent["gridText"] = Object.keys(dow)[i];
       gridContent["x"] = i + 1;
       gridContent["y"] = 0;
       gridContent["w"] = 1;
@@ -158,29 +165,34 @@ class Calender extends React.PureComponent {
         items.push(Object.assign({}, gridContent));
       }
     }
-    //
-    // //ここで予定を入れる
-    // for (let i = 0; i < 7; i++) {
-    //   gridContent = baseGridContent;
-    //   gridContent["i"] = (i + 1).toString();
-    //   gridContent["x"] = i + 1;
-    //   gridContent["y"] = i * 2 + 2;
-    //   gridContent["w"] = 1;
-    //   gridContent["gridType"] = "scheduleGrid";
-    //   items.push(Object.assign({}, gridContent));
-    // }
+
+    //ここで予定を入れる
+    let maxNumberOfPeopleOfEachSchedule = 0;
+    for (let schedule of resultsJSONs) {
+      gridContent = baseGridContent;
+      gridContent["i"] = schedule.date + "_" + schedule.start_time + "-" + schedule.end_time;
+      gridContent["gridText"] = schedule.people;
+      gridContent["x"] = dow[schedule.dow] + 1;
+      gridContent["y"] = schedule.start_time * 2 + 2;
+      gridContent["w"] = 1;
+      gridContent["h"] = (schedule.end_time - schedule.start_time) * 2;
+      gridContent["gridType"] = "candidateSchedule";
+      items.push(Object.assign({}, gridContent));
+      maxNumberOfPeopleOfEachSchedule = schedule.people.length > maxNumberOfPeopleOfEachSchedule ? schedule.people.length : maxNumberOfPeopleOfEachSchedule;
+    }
 
     this.state = {
       items: items,
       newCounter: 0,
       calenderBackendStyle: {},
+      maxNumberOfPeopleOfEachSchedule: maxNumberOfPeopleOfEachSchedule
     };
 
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
   }
 
   componentDidMount() {
-    const element = document.getElementById("calender" +this.props.calenderID).getBoundingClientRect();
+    const element = document.getElementById("calender" + this.props.calenderID).getBoundingClientRect();
     calenderDivWidth = Math.floor(element.width);
     const gridWidth = calenderDivWidth / numberOfColumns;
     const calenderBackendStyle = {
@@ -194,7 +206,7 @@ class Calender extends React.PureComponent {
   createElement(el) {
     const removeStyle = {
       position: "absolute",
-      left: "2px",
+      right: "2px",
       top: 0,
       cursor: "pointer"
     };
@@ -221,9 +233,14 @@ class Calender extends React.PureComponent {
       textAlign: "center",
       opacity: "0.3"
     };
-    const scheduleGridStyle = {
+    const newScheduleGridStyle = {
       position: "relative",
       background: "#b0c4de",
+    };
+    const candidateScheduleGridStyle = {
+      position: "relative",
+      background: "#8ede43",
+      opacity: gridText.length / this.state.maxNumberOfPeopleOfEachSchedule,
     };
 
     let contentOfGrid = null;
@@ -242,8 +259,21 @@ class Calender extends React.PureComponent {
       contentOfGrid = <span className="text" style={{position: "absolute", bottom: "0"}}>{gridText}</span>;
     } else if (el.gridType === "unableGrid") {
       gridStyle = unableGridStyle;
+    } else if (el.gridType === "candidateSchedule") {
+      gridStyle = candidateScheduleGridStyle;
+      // let peopleSpan = [];
+      // for (let person of gridText) {
+      //   peopleSpan.push(<span className="text" style={{fontSize:4}}>{person}</span>);
+      //   peopleSpan.push(<br></br>);
+      // }
+      // contentOfGrid = peopleSpan;
+      contentOfGrid =
+        <div style={{width:"95%"}}>
+          <span className="text">{gridText.join(",")}</span>
+        </div>;
+      removeButton = <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, key)}>x</span>
     } else {
-      gridStyle = scheduleGridStyle;
+      gridStyle = newScheduleGridStyle;
       removeButton = <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, key)}>x</span>
     }
     return (
@@ -293,7 +323,7 @@ class Calender extends React.PureComponent {
           height: (gridRowHeight + calenderMarginY) * (numberOfRows + 2),
           width: "100%",
         }}>
-          <div id={"calender"  +this.props.calenderID} style={calenderStyle}>
+          <div id={"calender" + this.props.calenderID} style={calenderStyle}>
             <ResponsiveReactGridLayout
               onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange}
@@ -302,7 +332,8 @@ class Calender extends React.PureComponent {
               {_.map(this.state.items, el => this.createElement(el))}
             </ResponsiveReactGridLayout>
           </div>
-          <div id={"calenderBackground" +this.props.calenderID} className={"calenderBackground"} style={this.state.calenderBackendStyle}>
+          <div id={"calenderBackground" + this.props.calenderID} className={"calenderBackground"}
+               style={this.state.calenderBackendStyle}>
           </div>
         </div>
       </div>

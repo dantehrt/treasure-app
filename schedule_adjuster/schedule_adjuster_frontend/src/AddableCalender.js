@@ -17,17 +17,6 @@ const calenderMarginX = 0;
 const calenderMarginY = 0;
 const numberOfColumns = 8;
 const numberOfRows = 50;
-//曜日
-const dow = {
-  0: "日",
-  1: "月",
-  2: "火",
-  3: "水",
-  4: "木",
-  5: "金",
-  6: "土",
-};
-
 
 let calenderDivWidth = null;
 
