@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import AddCalenderPage from './AddCalenderPage';
-import ShowCalenderPage from "./ShowCalenderPage";
+import AddCalendarPage from './AddCalendarPage';
+import ShowCalendarPage from "./ShowCalendarPage";
 import Home from './Home';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -14,8 +14,8 @@ class App extends React.Component {
           <div>
             <Switch>
               <Route exact path='/' component={Home}/>
-              <Route exact path='/:calender_url' component={ShowCalenderPage}/>
-              <Route path='/:calender_url/add' component={AddCalenderPage}/>
+              <Route exact path='/:calendar_url' component={ShowCalendarPage}/>
+              <Route path='/:calendar_url/add' component={AddCalendarPage}/>
             </Switch>
           </div>
         </Router>

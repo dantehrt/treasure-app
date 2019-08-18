@@ -1,8 +1,8 @@
 import React from "react";
 import {WidthProvider, Responsive} from "react-grid-layout";
 import _ from "lodash";
-import './Calender.css'
-import Calender from "./Calender";
+import './Calendar.css'
+import Calendar from "./Calendar";
 import moment from "moment";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -13,14 +13,14 @@ const gridMinWidth = 1;
 const gridMaxWidth = 1;
 const gridMinHeight = 1;
 const gridRowHeight = 30;
-const calenderMarginX = 0;
-const calenderMarginY = 0;
+const calendarMarginX = 0;
+const calendarMarginY = 0;
 const numberOfColumns = 8;
 const numberOfRows = 50;
 
-let calenderDivWidth = null;
+let calendarDivWidth = null;
 
-class AddableCalender extends Calender {
+class AddableCalendar extends Calendar {
   onAddItem(rowIndex, columnIndex) {
     /*eslint no-console: 0*/
     console.log("adding", "n" + this.state.newCounter);
@@ -41,25 +41,25 @@ class AddableCalender extends Calender {
     });
   }
 
-  clickCalender(e) {
-    const element = document.getElementById("calender" + this.props.calenderID).getBoundingClientRect();
+  clickCalendar(e) {
+    const element = document.getElementById("calendar" + this.props.calendarID).getBoundingClientRect();
     const elementTopX = Math.floor(element.x);
     const elementTopY = Math.floor(element.y);
     const elementWidth = Math.floor(element.width);
     const clickPointX = e.clientX - elementTopX;
     const clickPointY = e.clientY - elementTopY;
-    const gridTotalWidth = elementWidth - (this.props.cols.lg + 1) * calenderMarginX;
+    const gridTotalWidth = elementWidth - (this.props.cols.lg + 1) * calendarMarginX;
     const gridWidth = Math.floor(gridTotalWidth / this.props.cols.lg);
-    const columnIndex = Math.min(Math.floor(clickPointX / (gridWidth + calenderMarginX)), numberOfColumns - 1);
-    const rowIndex = Math.min(Math.floor(clickPointY / (this.props.rowHeight + calenderMarginY)), 47);
+    const columnIndex = Math.min(Math.floor(clickPointX / (gridWidth + calendarMarginX)), numberOfColumns - 1);
+    const rowIndex = Math.min(Math.floor(clickPointY / (this.props.rowHeight + calendarMarginY)), 47);
 
     this.onAddItem(rowIndex, columnIndex)
   }
 
   render() {
     // console.log(this.props);
-    const calenderStyle = {
-      height: (gridRowHeight + calenderMarginY) * numberOfRows,
+    const calendarStyle = {
+      height: (gridRowHeight + calendarMarginY) * numberOfRows,
       width: "100%",
       position: "absolute",
       background: "",
@@ -74,10 +74,10 @@ class AddableCalender extends Calender {
         {/*+2しているのは，divが重なるのを防ぐため*/}
         <div style={{
           position: "relative",
-          height: (gridRowHeight + calenderMarginY) * (numberOfRows + 2),
+          height: (gridRowHeight + calendarMarginY) * (numberOfRows + 2),
           width: "100%",
         }}>
-          <div id={"calender" + this.props.calenderID} onClick={this.clickCalender.bind(this)} style={calenderStyle}>
+          <div id={"calendar" + this.props.calendarID} onClick={this.clickCalendar.bind(this)} style={calendarStyle}>
             <ResponsiveReactGridLayout
               onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange}
@@ -86,8 +86,8 @@ class AddableCalender extends Calender {
               {_.map(this.state.items, el => this.createElement(el))}
             </ResponsiveReactGridLayout>
           </div>
-          <div id={"calenderBackground" + this.props.calenderID} className={"calenderBackground"}
-               style={this.state.calenderBackendStyle}>
+          <div id={"calendarBackground" + this.props.calendarID} className={"calendarBackground"}
+               style={this.state.calendarBackendStyle}>
           </div>
         </div>
       </div>
@@ -95,4 +95,4 @@ class AddableCalender extends Calender {
   }
 }
 
-export default AddableCalender;
+export default AddableCalendar;

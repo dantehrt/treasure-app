@@ -5,7 +5,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className="Home">
-        <Link to="/calender_url">CalenderPage</Link>
+        <Link to="/calendar_url">CalendarPage</Link>
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import {WidthProvider, Responsive} from "react-grid-layout";
 import _ from "lodash";
-import './Calender.css'
+import './Calendar.css'
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -11,8 +11,8 @@ const gridMinWidth = 1;
 const gridMaxWidth = 1;
 const gridMinHeight = 1;
 const gridRowHeight = 30;
-const calenderMarginX = 0;
-const calenderMarginY = 0;
+const calendarMarginX = 0;
+const calendarMarginY = 0;
 const numberOfColumns = 8;
 const numberOfRows = 50;
 //曜日
@@ -26,7 +26,7 @@ const dow = {
   "土": 6,
 };
 
-let calenderDivWidth = null;
+let calendarDivWidth = null;
 
 let resultsJSONs = [];
 const tmp20190817 = [
@@ -95,14 +95,14 @@ resultsJSONs = resultsJSONs.concat(tmp20190817, tmp20190819);
 // console.log(resultsJSONs);
 
 
-class Calender extends React.PureComponent {
+class Calendar extends React.PureComponent {
   static defaultProps = {
     className: "layout",
     cols: {lg: numberOfColumns, md: numberOfColumns, sm: numberOfColumns, xs: numberOfColumns, xxs: numberOfColumns},
     rowHeight: gridRowHeight,
     compactType: null,
     preventCollision: true,
-    margin: [calenderMarginX, calenderMarginY],
+    margin: [calendarMarginX, calendarMarginY],
   };
 
   constructor(props) {
@@ -139,7 +139,7 @@ class Calender extends React.PureComponent {
       gridContent["gridType"] = "timeGrid";
       items.push(Object.assign({}, gridContent));
     }
-    const calenderDates = this.props.calenderDates;
+    const calendarDates = this.props.calendarDates;
     //曜日のグリッドを追加
     for (let i = 0; i < 7; i++) {
       gridContent = baseGridContent;
@@ -152,8 +152,8 @@ class Calender extends React.PureComponent {
       items.push(Object.assign({}, gridContent));
     }
     //unableGridを追加
-    for (let i in calenderDates) {
-      if (calenderDates[i] === null) {
+    for (let i in calendarDates) {
+      if (calendarDates[i] === null) {
         gridContent = baseGridContent;
         gridContent["i"] = "null" + (i + 1).toString();
         gridContent["gridText"] = "null" + (i + 1).toString();
@@ -184,7 +184,7 @@ class Calender extends React.PureComponent {
     this.state = {
       items: items,
       newCounter: 0,
-      calenderBackendStyle: {},
+      calendarBackendStyle: {},
       maxNumberOfPeopleOfEachSchedule: maxNumberOfPeopleOfEachSchedule
     };
 
@@ -192,15 +192,15 @@ class Calender extends React.PureComponent {
   }
 
   componentDidMount() {
-    const element = document.getElementById("calender" + this.props.calenderID).getBoundingClientRect();
-    calenderDivWidth = Math.floor(element.width);
-    const gridWidth = calenderDivWidth / numberOfColumns;
-    const calenderBackendStyle = {
-      height: (gridRowHeight + calenderMarginY) * numberOfRows,
+    const element = document.getElementById("calendar" + this.props.calendarID).getBoundingClientRect();
+    calendarDivWidth = Math.floor(element.width);
+    const gridWidth = calendarDivWidth / numberOfColumns;
+    const calendarBackendStyle = {
+      height: (gridRowHeight + calendarMarginY) * numberOfRows,
       background: "linear-gradient(#000 1px, transparent 0), linear-gradient(90deg, #000 1px, transparent 0)",
       backgroundSize: gridWidth + "px " + gridRowHeight + "px",
     };
-    this.setState({calenderBackendStyle: calenderBackendStyle})
+    this.setState({calendarBackendStyle: calendarBackendStyle})
   }
 
   createElement(el) {
@@ -304,8 +304,8 @@ class Calender extends React.PureComponent {
 
 
   render() {
-    const calenderStyle = {
-      height: (gridRowHeight + calenderMarginY) * numberOfRows,
+    const calendarStyle = {
+      height: (gridRowHeight + calendarMarginY) * numberOfRows,
       width: "100%",
       position: "absolute",
       background: "",
@@ -320,10 +320,10 @@ class Calender extends React.PureComponent {
         {/*+2しているのは，divが重なるのを防ぐため*/}
         <div style={{
           position: "relative",
-          height: (gridRowHeight + calenderMarginY) * (numberOfRows + 2),
+          height: (gridRowHeight + calendarMarginY) * (numberOfRows + 2),
           width: "100%",
         }}>
-          <div id={"calender" + this.props.calenderID} style={calenderStyle}>
+          <div id={"calendar" + this.props.calendarID} style={calendarStyle}>
             <ResponsiveReactGridLayout
               onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange}
@@ -332,8 +332,8 @@ class Calender extends React.PureComponent {
               {_.map(this.state.items, el => this.createElement(el))}
             </ResponsiveReactGridLayout>
           </div>
-          <div id={"calenderBackground" + this.props.calenderID} className={"calenderBackground"}
-               style={this.state.calenderBackendStyle}>
+          <div id={"calendarBackground" + this.props.calendarID} className={"calendarBackground"}
+               style={this.state.calendarBackendStyle}>
           </div>
         </div>
       </div>
@@ -341,4 +341,4 @@ class Calender extends React.PureComponent {
   }
 }
 
-export default Calender;
+export default Calendar;
