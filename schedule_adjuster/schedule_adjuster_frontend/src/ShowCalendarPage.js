@@ -106,7 +106,7 @@ class ShowCalendarPage extends React.Component {
     let targetDate = moment(startDate);
     let candidateScheduleJSONsList = [];
     for (let i = 0; i < numberOfWeekCalendars; i++) {
-      let rowCandidateScheduleJSONsList = [];
+      let rowCandidateScheduleJSONsList = {};
       let calendarDates = [];
       let startDayOfWeek = 0;
       if (i === 0) {//初週
@@ -121,7 +121,7 @@ class ShowCalendarPage extends React.Component {
         } else {
           calendarDates.push(targetDate.format('YYYY-MM-DD'));
           if (candidateScheduleJSONs.candidateSchedules[targetDate.format('YYYY-MM-DD')]) {
-            rowCandidateScheduleJSONsList.push(candidateScheduleJSONs.candidateSchedules[targetDate.format('YYYY-MM-DD')]);
+            rowCandidateScheduleJSONsList[targetDate.format('YYYY-MM-DD')] = candidateScheduleJSONs.candidateSchedules[targetDate.format('YYYY-MM-DD')];
           }
         }
         targetDate.add(1, 'days');
@@ -131,8 +131,6 @@ class ShowCalendarPage extends React.Component {
       }
       candidateScheduleJSONsList.push(rowCandidateScheduleJSONsList);
     }
-
-    console.log(candidateScheduleJSONsList);
 
     this.state = {
       whichVisibleCalendarParentDiv: null,
@@ -167,7 +165,9 @@ class ShowCalendarPage extends React.Component {
         <div id={"calendarParentDiv" + i}
              style={{display: this.state.whichVisibleCalendarParentDiv === null || this.state.whichVisibleCalendarParentDiv === i ? "inline" : "none"}}>
           <Calendar onLayoutChange={this.onLayoutChange} calendarID={i}
-                    calendarDates={this.state.calendarDatesList[i]}/>
+                    calendarDates={this.state.calendarDatesList[i]}
+                    candidateScheduleJSONsList={this.state.candidateScheduleJSONsList}
+          />
         </div>
       )
     }
