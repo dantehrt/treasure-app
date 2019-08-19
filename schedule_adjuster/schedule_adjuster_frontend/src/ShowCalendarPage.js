@@ -15,6 +15,86 @@ let startDate;
 let calendarStartDate;
 let endDate;
 
+let candidateScheduleJSONs = {
+  "candidateSchedules":
+    {
+      "2019-08-17": [
+        {
+          "dow": "土",
+          "start_time": 10,
+          "end_time": 12,
+          "people": ["ダンテ", "立", "ひろき", "ひろき"]
+        },
+        {
+          "dow": "土",
+          "start_time": 12,
+          "end_time": 14,
+          "people": ["立", "ひろき"]
+        },
+        {
+          "dow": "土",
+          "start_time": 16,
+          "end_time": 18,
+          "people": ["ひろき"]
+        },
+        {
+          "dow": "土",
+          "start_time": 18,
+          "end_time": 20,
+          "people": ["ダンテ", "ダンテ"]
+        },
+        {
+          "dow": "土",
+          "start_time": 20,
+          "end_time": 24,
+          "people": ["ダンテ"]
+        },
+      ],
+      "2019-08-19": [
+        {
+          "dow": "月",
+          "start_time": 11,
+          "end_time": 13,
+          "people": ["ダンテ", "立", "ひろき"]
+        },
+        {
+          "dow": "月",
+          "start_time": 17,
+          "end_time": 19,
+          "people": ["ひろき"]
+        },
+        {
+          "dow": "月",
+          "start_time": 21,
+          "end_time": 24,
+          "people": ["ダンテ"]
+        },
+      ],
+      "2019-08-20": [
+        {
+          "dow": "火",
+          "start_time": 11,
+          "end_time": 13,
+          "people": ["ダンテ", "立", "ひろき"]
+        },
+        {
+          "dow": "火",
+          "start_time": 17,
+          "end_time": 19,
+          "people": ["ひろき"]
+        },
+        {
+          "dow": "火",
+          "start_time": 21,
+          "end_time": 24,
+          "people": ["ダンテ"]
+        },
+      ],
+    }
+};
+
+let candidateScheduleJSONsList = [];
+
 class ShowCalendarPage extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +107,7 @@ class ShowCalendarPage extends React.Component {
     let calendarDatesList = [];
     let targetDate = moment(startDate);
     for (let i = 0; i < numberOfWeekCalendars; i++) {
-      console.log(targetDate.format('YYYY-MM-DD'));
+      let rowCandidateScheduleJSONsList = [];
       let calendarDates = [];
       let startDayOfWeek = 0;
       if (i === 0) {//初週
@@ -41,11 +121,19 @@ class ShowCalendarPage extends React.Component {
           calendarDates.push(null);
         } else {
           calendarDates.push(targetDate.format('YYYY-MM-DD'));
+          if (candidateScheduleJSONs.candidateSchedules[targetDate.format('YYYY-MM-DD')]) {
+            rowCandidateScheduleJSONsList.push(candidateScheduleJSONs.candidateSchedules[targetDate.format('YYYY-MM-DD')]);
+          }
         }
         targetDate.add(1, 'days');
       }
-      calendarDatesList.push(calendarDates);
+      if (calendarDates != []) {
+        calendarDatesList.push(calendarDates);
+      }
+      candidateScheduleJSONsList.push(rowCandidateScheduleJSONsList);
     }
+
+    console.log(candidateScheduleJSONsList);
 
     this.state = {
       whichVisibleCalendarParentDiv: null,
