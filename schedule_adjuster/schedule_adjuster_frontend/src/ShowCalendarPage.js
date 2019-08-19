@@ -93,8 +93,6 @@ let candidateScheduleJSONs = {
     }
 };
 
-let candidateScheduleJSONsList = [];
-
 class ShowCalendarPage extends React.Component {
   constructor(props) {
     super(props);
@@ -106,6 +104,7 @@ class ShowCalendarPage extends React.Component {
 
     let calendarDatesList = [];
     let targetDate = moment(startDate);
+    let candidateScheduleJSONsList = [];
     for (let i = 0; i < numberOfWeekCalendars; i++) {
       let rowCandidateScheduleJSONsList = [];
       let calendarDates = [];
@@ -139,6 +138,7 @@ class ShowCalendarPage extends React.Component {
       whichVisibleCalendarParentDiv: null,
       calendarDatesList: calendarDatesList,
       numberOfWeekCalendars: numberOfWeekCalendars,
+      candidateScheduleJSONsList: candidateScheduleJSONsList,
     };
   }
 
