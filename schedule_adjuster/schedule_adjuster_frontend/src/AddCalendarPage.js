@@ -11,7 +11,9 @@ class AddCalendarPage extends ShowCalendarPage {
       list.push(
         <div id={"calendarParentDiv" + i}
              style={{display: this.state.whichVisibleCalendarParentDiv === null || this.state.whichVisibleCalendarParentDiv === i ? "inline" : "none"}}>
-          <AddableCalendar onLayoutChange={this.onLayoutChange} calendarID={i} calendarDates={this.state.calendarDatesList[i]}/>
+          <AddableCalendar onLayoutChange={this.onLayoutChange} calendarID={i} calendarDates={this.state.calendarDatesList[i]}
+                           candidateScheduleJSONsList={null}
+          />
         </div>
       )
     }

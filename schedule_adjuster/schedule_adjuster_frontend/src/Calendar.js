@@ -28,73 +28,6 @@ const dow = {
 
 let calendarDivWidth = null;
 
-let resultsJSONs = [];
-const tmp20190817 = [
-  {
-    "date": "2019-08-17",
-    "dow": "土",
-    "start_time": 10,
-    "end_time": 12,
-    "people": ["ダンテ", "立", "ひろき", "ひろき"]
-  },
-  {
-    "date": "2019-08-17",
-    "dow": "土",
-    "start_time": 12,
-    "end_time": 14,
-    "people": ["立", "ひろき"]
-  },
-  {
-    "date": "2019-08-17",
-    "dow": "土",
-    "start_time": 16,
-    "end_time": 18,
-    "people": ["ひろき"]
-  },
-  {
-    "date": "2019-08-17",
-    "dow": "土",
-    "start_time": 18,
-    "end_time": 20,
-    "people": ["ダンテ","ダンテ"]
-  },
-  {
-    "date": "2019-08-17",
-    "dow": "土",
-    "start_time": 20,
-    "end_time": 24,
-    "people": ["ダンテ"]
-  },
-];
-
-const tmp20190819 = [
-  // {
-  //   "date": "2019-08-19",
-  //   "dow": "月",
-  //   "start_time": 11,
-  //   "end_time": 13,
-  //   "people": ["ダンテ", "立", "ひろき"]
-  // },
-  // {
-  //   "date": "2019-08-19",
-  //   "dow": "月",
-  //   "start_time": 17,
-  //   "end_time": 19,
-  //   "people": ["ひろき"]
-  // },
-  // {
-  //   "date": "2019-08-19",
-  //   "dow": "月",
-  //   "start_time": 21,
-  //   "end_time": 24,
-  //   "people": ["ダンテ"]
-  // },
-];
-
-resultsJSONs = resultsJSONs.concat(tmp20190817, tmp20190819);
-// console.log(resultsJSONs);
-
-
 class Calendar extends React.PureComponent {
   static defaultProps = {
     className: "layout",
@@ -168,17 +101,25 @@ class Calendar extends React.PureComponent {
 
     //ここで予定を入れる
     let maxNumberOfPeopleOfEachSchedule = 0;
-    for (let schedule of resultsJSONs) {
-      gridContent = baseGridContent;
-      gridContent["i"] = schedule.date + "_" + schedule.start_time + "-" + schedule.end_time;
-      gridContent["gridText"] = schedule.people;
-      gridContent["x"] = dow[schedule.dow] + 1;
-      gridContent["y"] = schedule.start_time * 2 + 2;
-      gridContent["w"] = 1;
-      gridContent["h"] = (schedule.end_time - schedule.start_time) * 2;
-      gridContent["gridType"] = "candidateSchedule";
-      items.push(Object.assign({}, gridContent));
-      maxNumberOfPeopleOfEachSchedule = schedule.people.length > maxNumberOfPeopleOfEachSchedule ? schedule.people.length : maxNumberOfPeopleOfEachSchedule;
+    if (this.props.candidateScheduleJSONsList) {
+      for (let [date, candidateScheduleJSONs] of Object.entries(this.props.candidateScheduleJSONsList)) {
+        for (let schedule of candidateScheduleJSONs) {
+          console.log(schedule);
+          // console.log(date);
+          // console.log(schedule);
+          gridContent = baseGridContent;
+          gridContent["i"] = date + "_" + schedule.start_time + "-" + schedule.end_time;
+          gridContent["gridText"] = schedule.people;
+          gridContent["x"] = dow[schedule.dow] + 1;
+          gridContent["y"] = schedule.start_time * 2 + 2;
+          gridContent["w"] = 1;
+          gridContent["h"] = (schedule.end_time - schedule.start_time) * 2;
+          gridContent["gridType"] = "candidateSchedule";
+          items.push(Object.assign({}, gridContent));
+          console.log(schedule);
+          maxNumberOfPeopleOfEachSchedule = schedule.people.length > maxNumberOfPeopleOfEachSchedule ? schedule.people.length : maxNumberOfPeopleOfEachSchedule;
+        }
+      }
     }
 
     this.state = {
@@ -268,7 +209,7 @@ class Calendar extends React.PureComponent {
       // }
       // contentOfGrid = peopleSpan;
       contentOfGrid =
-        <div style={{width:"95%"}}>
+        <div style={{width: "95%"}}>
           <span className="text">{gridText.join(",")}</span>
         </div>;
       removeButton = <span className="remove" style={removeStyle} onClick={this.onRemoveItem.bind(this, key)}>x</span>

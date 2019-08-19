@@ -166,7 +166,7 @@ class ShowCalendarPage extends React.Component {
              style={{display: this.state.whichVisibleCalendarParentDiv === null || this.state.whichVisibleCalendarParentDiv === i ? "inline" : "none"}}>
           <Calendar onLayoutChange={this.onLayoutChange} calendarID={i}
                     calendarDates={this.state.calendarDatesList[i]}
-                    candidateScheduleJSONsList={this.state.candidateScheduleJSONsList}
+                    candidateScheduleJSONsList={this.state.candidateScheduleJSONsList[i]}
           />
         </div>
       )
